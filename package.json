@@ -10,10 +10,8 @@
   ],
   "author": "info@MadnessLabs.net",
   "scripts": {
-    "commit": "git cz",
     "build": "tsup src/index.ts --format esm,cjs --dts",
-    "test": "",
-    "prepublishOnly": "npm run build"
+    "test": ""
   },
   "license": "MIT",
   "homepage": "https://github.com/fireenjin/vite",

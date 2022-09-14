@@ -1,10 +1,10 @@
 import fg from "fast-glob";
 import yargs from "yargs";
 import path from "path";
-import type { MpaOptions } from "./options";
+import type { PluginOptions } from "./options";
 import type { Rewrite } from "connect-history-api-fallback";
 
-const argv = yargs.argv;
+const argv: any = yargs.argv;
 
 export type PageInfo = Record<
   string,
@@ -93,7 +93,7 @@ function getPagesInfo({
   defaultEntries,
   scanDir,
   scanFile,
-}: MpaOptions): PageInfo {
+}: PluginOptions): PageInfo {
   const allFiles = fg.sync(`${scanDir}/**/${scanFile}`.replace("//", "/"));
   // Calc
   const pages = {};
@@ -109,7 +109,7 @@ function getPagesInfo({
   return pages;
 }
 
-export function getMPAIO(root: string, options: MpaOptions) {
+export function getMPAIO(root: string, options: PluginOptions) {
   const { scanFile, filename } = options;
   const pages = getPagesInfo(options);
   const input: Record<string, string> = {};
@@ -125,7 +125,7 @@ export function getMPAIO(root: string, options: MpaOptions) {
 /**
  * history rewrite list
  */
-export function getHistoryReWriteRuleList(options: MpaOptions): Rewrite[] {
+export function getHistoryReWriteRuleList(options: PluginOptions): Rewrite[] {
   const { scanDir, scanFile, filename, rewrites } = options;
   const list: Rewrite[] = rewrites;
   list.push({
@@ -133,8 +133,10 @@ export function getHistoryReWriteRuleList(options: MpaOptions): Rewrite[] {
     to: `./${scanDir}/index/${filename}`,
   });
   const pages = getPagesInfo(options);
+  console.log(pages);
   Object.keys(pages).map((pageName) => {
     const to = `./${scanFile2Html(pages[pageName].entry, scanFile, filename)}`;
+    console.log(to);
     list.push({
       from: new RegExp(`^/${pageName}/index.html/*`), // handle html5 history mode fallback
       to,
@@ -156,5 +158,7 @@ export function getHistoryReWriteRuleList(options: MpaOptions): Rewrite[] {
       to,
     });
   });
+
+  console.log(list);
   return list;
 }

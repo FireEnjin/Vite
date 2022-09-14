@@ -70,6 +70,7 @@ export default function fireenjin(userOptions: UserOptions = {}): Plugin {
       // 2. remove all *.html at dest root
       shell.rm("-rf", resolve(`${dest}/*.html`));
       // 3. move src/pages/* to dest root
+      console.log(`${dest}/${options.scanDir}/*`);
       shell.mv(resolve(`${dest}/${options.scanDir}/*`), resolve(dest));
       // 4. remove empty src dir
       shell.rm("-rf", resolve(`${dest}/src`));
